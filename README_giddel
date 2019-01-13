@@ -1,0 +1,12 @@
+
+Bauen und starten
+------------
+
+go build .
+./shawty
+
+Docker:
+
+docker build -t shortener:<version> .
+docker run -rm -p8080:8080  shortener:<version>
+
