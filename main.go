@@ -30,6 +30,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	println("running url shortener on http://localhost:" + port)
 	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
