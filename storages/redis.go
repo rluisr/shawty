@@ -1,7 +1,9 @@
 package storages
 
 import (
+	//"fmt"
 	"log"
+	"strconv"
 
 	"github.com/go-redis/redis"
 )
@@ -10,11 +12,11 @@ type Redis struct {
 	redisclient *redis.Client
 }
 
-func (s *Redis) Init() error {
+func (s *Redis) Init(c DbCredentials) error {
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     c.Host + ":" + strconv.Itoa(c.Port),
+		Password: c.Pass,
+		DB:       c.Name,
 	})
 
 	pong, error := client.Ping().Result()
@@ -43,8 +45,14 @@ func (s *Redis) Save(url string) string {
 
 func (s *Redis) Load(code string) (string, error) {
 	url, err := s.redisclient.Get(code).Result()
+	// wenn key not found err: "redis: nil"
 	if err != nil {
-		panic(err)
+		//fmt.Println("%v", err)
+		//s := err.Error()
+		//log.Print("Fehler lesen code: " + code + " aus datenbank: " + s)
+		log.Print("Fehler lesen code: " + code + " aus datenbank: " + err.Error())
+		//url = ""
+		//panic(err)
 	}
 
 	return string(url), err

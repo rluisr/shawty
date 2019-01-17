@@ -4,25 +4,23 @@ import (
 	"log"
 	"net/http"
 	"os"
-	//	"path/filepath"
-	"runtime"
 
 	"github.com/didip/shawty/handlers"
 	"github.com/didip/shawty/storages"
-	//"github.com/mitchellh/go-homedir"
 )
 
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	// this should be read from config!
+	credentials := storages.DbCredentials{
+		Host: "localhost",
+		Port: 6379,
+		Name: 0,
+		User: "",
+		Pass: "",
+	}
 
-	//	dir, _ := homedir.Dir()
-	///storage := &storages.Filesystem{}
-	//	err := storage.Init(filepath.Join(dir, "shawty"))
-	//	if err != nil {
-	//log.Fatal(err)
-	//}
 	storage := &storages.Redis{}
-	err := storage.Init()
+	err := storage.Init(credentials)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,6 +29,7 @@ func main() {
 	http.Handle("/dec/", handlers.DecodeHandler(storage))
 	http.Handle("/red/", handlers.RedirectHandler(storage))
 
+	// port should be read from config!
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
