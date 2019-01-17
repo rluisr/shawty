@@ -40,6 +40,8 @@ func (s *Redis) Save(url string) string {
 		panic(err)
 	}
 
+	log.Print("saved url: " + url + " as key: " + code)
+
 	return code
 }
 

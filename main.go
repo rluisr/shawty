@@ -25,7 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	http.Handle("/", handlers.EncodeHandler(storage))
+	http.Handle("/", handlers.MainHandler(storage))
+	http.Handle("/enc", handlers.EncodeHandler(storage))
 	http.Handle("/dec/", handlers.DecodeHandler(storage))
 	http.Handle("/red/", handlers.RedirectHandler(storage))
 
