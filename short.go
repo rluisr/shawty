@@ -13,17 +13,19 @@ var base int = len(alphabet)
 // codiert einen integer zu einem kurzen String
 func encode(i int) string {
 
-	if i == 0 {
-		return string(alphabet[0])
-	}
-
 	s := ""
 	for i > 0 {
 		s += string(alphabet[i%base])
 		i = i / base
+		//fmt.Printf("s  = %#v \n", s)
 	}
-	return strings.Join([]string{reverse(s)}, "")
+	if i == 0 {
+		s += string(alphabet[0])
+	}
 
+	result := strings.Join([]string{reverse(s)}, "")
+	//fmt.Printf("result  = %#v \n", result)
+	return result
 }
 
 //decodiert einen kurzen String zu einem Integer
@@ -33,9 +35,12 @@ func decode(s string) int {
 
 	//foreach (var c in s) {
 	for _, char := range s {
-		fmt.Printf("%s zu %s\n", s, string(char))
+		//fmt.Printf("char  = %#v \n", char)
+
+		//fmt.Printf("%s zu %s\n", s, string(char))
 		i = (i * base) + strings.Index(alphabet, string(char))
-		fmt.Printf("i ist: %d \n", i)
+
+		//fmt.Printf("i  = %#v \n", i)
 	}
 
 	return i
@@ -52,19 +57,21 @@ func reverse(s string) string {
 func main() {
 	fmt.Println("vim-go")
 
-	/*
-		for i := 0; i < 1000; i++ {
+	//fmt.Printf("base  = %#v \n", base)
+	for i := 0; i < 9000000; i++ {
 
-			fmt.Println("-------")
-			fmt.Printf("kodiere: %d zu %s\n", i, encode(i))
+		fmt.Println("-------")
+		fmt.Printf("kodiere: %d zu %s\n", i, encode(i))
 
-			if decode(encode(1)) != i {
-				fmt.Printf("%d is not %s\n", i, encode(i))
-			}
+		if decode(encode(i)) != i {
+			fmt.Printf("%d is not %s\n", i, encode(i))
 		}
+	}
+	/*
+		fmt.Println("---ENCODE ---")
+		fmt.Printf("kodiere %d zu %#v\n", 23, encode(23))
+		fmt.Println("--- DECODE ---")
+		fmt.Printf("dekodiere %s zu %d\n", "ax", decode("ax"))
+		fmt.Println("-------")
 	*/
-	fmt.Println("-------")
-	fmt.Println("-------")
-	fmt.Printf("kodiere %d zu %s\n", 23, encode(23))
-	fmt.Printf("dekodiere %s zu %d\n", "ax", decode("ax"))
 }
