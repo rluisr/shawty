@@ -1,0 +1,26 @@
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  arch: amd64
+
+steps:
+  - name: lint
+    image: golangci/golangci-lint:v1.23-alpine
+    commands:
+      - golangci-lint run
+
+  - name: build push docker image
+    image: plugins/docker
+    environment:
+      DOCKER_BUILDKIT: 1
+    settings:
+      repo: rluisr/shawty
+      tags: ${DRONE_COMMIT}
+    when:
+      branch:
+        - master
+        - develop
+      event:
+        - push
