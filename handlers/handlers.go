@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/didip/shawty/storages"
+	"github.com/rluisr/shawty/storages"
 )
 
 func EncodeHandler(storage storages.IStorage) http.Handler {

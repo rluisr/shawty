@@ -1,26 +1,29 @@
 package storages
 
 import (
+	"github.com/rluisr/shawty/models"
 	"log"
 
 	"github.com/go-redis/redis"
 )
 
 type Redis struct {
-	redisclient *redis.Client
+	redisClient *redis.Client
 }
 
 func (s *Redis) Init() error {
+	config := models.NewConfig()
+
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     config.RedisAddr,
+		Password: config.RedisPassword,
+		DB:       config.RedisDB,
 	})
 
 	pong, error := client.Ping().Result()
 	log.Print(pong, error)
 	// Output: PONG <nil>
-	s.redisclient = client
+	s.redisClient = client
 	return error
 }
 
@@ -33,7 +36,7 @@ func (s *Redis) Code() string {
 func (s *Redis) Save(url string) string {
 	code := s.Code()
 
-	err := s.redisclient.Set(code, url, 0).Err()
+	err := s.redisClient.Set(code, url, 0).Err()
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +45,7 @@ func (s *Redis) Save(url string) string {
 }
 
 func (s *Redis) Load(code string) (string, error) {
-	url, err := s.redisclient.Get(code).Result()
+	url, err := s.redisClient.Get(code).Result()
 	if err != nil {
 		panic(err)
 	}

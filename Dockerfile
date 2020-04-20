@@ -1,6 +1,5 @@
 FROM golang as builder
 
-# Path in builders $GOPATH (/go)
 WORKDIR /go/src/github.com/didip/shawty
 COPY . .
 RUN go get .

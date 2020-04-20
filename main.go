@@ -4,23 +4,15 @@ import (
 	"log"
 	"net/http"
 	"os"
-	//	"path/filepath"
 	"runtime"
 
-	"github.com/didip/shawty/handlers"
-	"github.com/didip/shawty/storages"
-	//"github.com/mitchellh/go-homedir"
+	"github.com/rluisr/shawty/handlers"
+	"github.com/rluisr/shawty/storages"
 )
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	//	dir, _ := homedir.Dir()
-	///storage := &storages.Filesystem{}
-	//	err := storage.Init(filepath.Join(dir, "shawty"))
-	//	if err != nil {
-	//log.Fatal(err)
-	//}
 	storage := &storages.Redis{}
 	err := storage.Init()
 	if err != nil {
