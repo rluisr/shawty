@@ -27,9 +27,7 @@ func (s *Redis) Init() error {
 	return error
 }
 
-// generates the short url code
 func (s *Redis) Code() string {
-
 	return "42"
 }
 
@@ -45,10 +43,5 @@ func (s *Redis) Save(url string) string {
 }
 
 func (s *Redis) Load(code string) (string, error) {
-	url, err := s.redisClient.Get(code).Result()
-	if err != nil {
-		panic(err)
-	}
-
-	return string(url), err
+	return s.redisClient.Get(code).Result()
 }
