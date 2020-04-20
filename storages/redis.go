@@ -1,10 +1,8 @@
 package storages
 
 import (
-	"github.com/rluisr/shawty/models"
-	"log"
-
 	"github.com/go-redis/redis"
+	"github.com/rluisr/shawty/models"
 )
 
 type Redis struct {
@@ -14,17 +12,14 @@ type Redis struct {
 func (s *Redis) Init() error {
 	config := models.NewConfig()
 
-	client := redis.NewClient(&redis.Options{
+	s.redisClient = redis.NewClient(&redis.Options{
 		Addr:     config.RedisAddr,
 		Password: config.RedisPassword,
 		DB:       config.RedisDB,
 	})
 
-	pong, error := client.Ping().Result()
-	log.Print(pong, error)
-	// Output: PONG <nil>
-	s.redisClient = client
-	return error
+	_, err := s.redisClient.Ping().Result()
+	return err
 }
 
 func (s *Redis) Code() string {
