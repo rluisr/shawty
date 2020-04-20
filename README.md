@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/didip/shawty?status.svg)](http://godoc.org/github.com/didip/shawty)
+[![Build Status](https://cloud.drone.io/api/badges/rluisr/shawty/status.svg)](https://cloud.drone.io/rluisr/shawty)
 [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/didip/shawty/master/LICENSE)
 
 ## Shawty: URL Shortener Service
