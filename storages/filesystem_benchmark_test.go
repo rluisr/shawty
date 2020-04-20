@@ -10,7 +10,11 @@ import (
 func BenchmarkCode(b *testing.B) {
 	dir, _ := homedir.Dir()
 	storage := &Filesystem{}
-	storage.Init(filepath.Join(dir, "shawty"))
+
+	err := storage.Init(filepath.Join(dir, "shawty"))
+	if err != nil {
+		b.Error(err)
+	}
 
 	for i := 0; i < b.N; i++ {
 		storage.Code()

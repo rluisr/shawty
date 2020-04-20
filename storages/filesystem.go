@@ -2,6 +2,7 @@ package storages
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -30,7 +31,10 @@ func (s *Filesystem) Save(url string) string {
 	code := s.Code()
 
 	s.Lock()
-	ioutil.WriteFile(filepath.Join(s.Root, code), []byte(url), 0744)
+	err := ioutil.WriteFile(filepath.Join(s.Root, code), []byte(url), 0744)
+	if err != nil {
+		log.Printf("err: %v\n", err)
+	}
 	s.Unlock()
 
 	return code

@@ -12,7 +12,11 @@ func EncodeHandler(storage storages.IStorage) http.Handler {
 	handleFunc := func(w http.ResponseWriter, r *http.Request) {
 		if url := r.PostFormValue("url"); url != "" {
 			log.Print("save url: " + url)
-			w.Write([]byte(storage.Save(url)))
+			_, err := w.Write([]byte(storage.Save(url)))
+			if err != nil {
+				log.Printf("err: %v\n", err)
+				return
+			}
 		}
 	}
 
@@ -27,11 +31,19 @@ func DecodeHandler(storage storages.IStorage) http.Handler {
 		url, err := storage.Load(code)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("URL Not Found. Error: " + err.Error() + "\n"))
+			_, err = w.Write([]byte("URL Not Found. Error: " + err.Error() + "\n"))
+			if err != nil {
+				log.Printf("err: %v\n", err)
+				return
+			}
 			return
 		}
 
-		w.Write([]byte(url))
+		_, err = w.Write([]byte(url))
+		if err != nil {
+			log.Printf("err: %v\n", err)
+			return
+		}
 	}
 
 	return http.HandlerFunc(handleFunc)
@@ -45,7 +57,11 @@ func RedirectHandler(storage storages.IStorage) http.Handler {
 		url, err := storage.Load(code)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("URL Not Found. Error: " + err.Error() + "\n"))
+			_, err = w.Write([]byte("URL Not Found. Error: " + err.Error() + "\n"))
+			if err != nil {
+				log.Printf("err: %v\n", err)
+				return
+			}
 			return
 		}
 
