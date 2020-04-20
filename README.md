@@ -12,13 +12,16 @@ It has 3 features: shorten, unshorten, and redirect.
 
 You need to implement a storage that can scale beyond one application server.
 
+Need these environment variables.
 
 #### Redis
-Need environments.
+- `REDIS_ADDR`
+- `REDIS_PASSWORD`
+- `REDIS_DB`
 
-- REDIS_ADDR
-- REDIS_PASSWORD
-- REDIS_DB
+#### Random string size
+- `GENERATE_SIZE`
+
 
 ### Why?
 

@@ -2,8 +2,11 @@ package storages
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/rluisr/shawty/lib"
 	"github.com/rluisr/shawty/models"
 )
+
+var config = models.NewConfig()
 
 type Redis struct {
 	redisClient *redis.Client
@@ -22,8 +25,9 @@ func (s *Redis) Init() error {
 	return err
 }
 
+// generate
 func (s *Redis) Code() string {
-	return "42"
+	return lib.RandString(config.GenerateSize)
 }
 
 func (s *Redis) Save(url string) string {
