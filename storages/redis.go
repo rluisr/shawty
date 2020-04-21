@@ -25,6 +25,7 @@ func (s *Redis) Init() error {
 		s.redisClient = redis.NewFailoverClient(&redis.FailoverOptions{
 			MasterName:    config.RedisSentinelMasterName,
 			Password:      config.RedisPassword,
+			DB:            config.RedisDB,
 			SentinelAddrs: config.RedisSentinelAddr,
 		})
 	}
