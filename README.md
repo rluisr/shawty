@@ -19,6 +19,11 @@ Need these environment variables.
 - `REDIS_PASSWORD`
 - `REDIS_DB`
 
+If you have redis sentinel, set `REDIS_SENTINEL_ADDR`, `REDIS_SENTINEL_MASTER_NAME`,`REDIS_PASSWORD` and `REDIS_DB`.
+
+#### REDIS_SENTINEL_MASTER_ADDR
+split with `,` like `sentinel01.local,sentinel02.local`
+
 #### Random string size
 - `GENERATE_SIZE`
 

@@ -3,13 +3,16 @@ package models
 import (
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Config struct {
-	RedisAddr     string
-	RedisPassword string
-	RedisDB       int
-	GenerateSize  int
+	RedisAddr               string
+	RedisSentinelMasterName string
+	RedisSentinelAddr       []string
+	RedisPassword           string
+	RedisDB                 int
+	GenerateSize            int
 }
 
 func NewConfig() *Config {
@@ -23,10 +26,17 @@ func NewConfig() *Config {
 		panic(err)
 	}
 
+	var redisSentinelAddr []string
+	if os.Getenv("REDIS_SENTINEL_ADDR") != "" {
+		redisSentinelAddr = strings.Split(os.Getenv("REDIS_SENTINEL_ADDR"), ",")
+	}
+
 	return &Config{
-		RedisAddr:     os.Getenv("REDIS_ADDR"),
-		RedisPassword: os.Getenv("REDIS_PASSWORD"),
-		RedisDB:       redisDBInt,
-		GenerateSize:  generateSize,
+		RedisAddr:               os.Getenv("REDIS_ADDR"),
+		RedisSentinelMasterName: os.Getenv("REDIS_SENTINEL_MASTER_NAME"),
+		RedisSentinelAddr:       redisSentinelAddr,
+		RedisPassword:           os.Getenv("REDIS_PASSWORD"),
+		RedisDB:                 redisDBInt,
+		GenerateSize:            generateSize,
 	}
 }

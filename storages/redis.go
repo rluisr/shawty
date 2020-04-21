@@ -15,11 +15,19 @@ type Redis struct {
 func (s *Redis) Init() error {
 	config := models.NewConfig()
 
-	s.redisClient = redis.NewClient(&redis.Options{
-		Addr:     config.RedisAddr,
-		Password: config.RedisPassword,
-		DB:       config.RedisDB,
-	})
+	if len(config.RedisSentinelAddr) == 0 {
+		s.redisClient = redis.NewClient(&redis.Options{
+			Addr:     config.RedisAddr,
+			Password: config.RedisPassword,
+			DB:       config.RedisDB,
+		})
+	} else {
+		s.redisClient = redis.NewFailoverClient(&redis.FailoverOptions{
+			MasterName:    config.RedisSentinelMasterName,
+			Password:      config.RedisPassword,
+			SentinelAddrs: config.RedisSentinelAddr,
+		})
+	}
 
 	_, err := s.redisClient.Ping().Result()
 	return err
