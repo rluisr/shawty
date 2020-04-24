@@ -3,6 +3,6 @@ package storages
 
 type IStorage interface {
 	Code() string
-	Save(string) string
+	Save(string) (string, error)
 	Load(string) (string, error)
 }
