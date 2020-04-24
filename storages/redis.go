@@ -1,9 +1,11 @@
 package storages
 
 import (
+	"errors"
 	"github.com/go-redis/redis"
 	"github.com/rluisr/shawty/lib"
 	"github.com/rluisr/shawty/models"
+	"time"
 )
 
 var config = models.NewConfig()
@@ -39,15 +41,23 @@ func (s *Redis) Code() string {
 	return lib.RandString(config.GenerateSize)
 }
 
-func (s *Redis) Save(url string) string {
-	code := s.Code()
+func (s *Redis) Save(url string) (string, error) {
+	var code string
 
-	err := s.redisClient.Set(code, url, 0).Err()
-	if err != nil {
-		panic(err)
+	for {
+		code = s.Code()
+
+		err := s.redisClient.Get(code).Err()
+		if errors.Is(err, redis.Nil) {
+			err = s.redisClient.Set(code, url, 720*time.Hour).Err()
+			if err != nil {
+				return "", err
+			}
+			break
+		}
 	}
 
-	return code
+	return code, nil
 }
 
 func (s *Redis) Load(code string) (string, error) {
