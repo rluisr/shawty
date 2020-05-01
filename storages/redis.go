@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/rluisr/shawty/lib"
 	"github.com/rluisr/shawty/models"
+	"strconv"
 	"time"
 )
 
@@ -41,7 +42,7 @@ func (s *Redis) Code() string {
 	return lib.RandString(config.GenerateSize)
 }
 
-func (s *Redis) Save(url string) (string, error) {
+func (s *Redis) Save(url, expire string) (string, error) {
 	var code string
 
 	for {
@@ -49,7 +50,12 @@ func (s *Redis) Save(url string) (string, error) {
 
 		err := s.redisClient.Get(code).Err()
 		if errors.Is(err, redis.Nil) {
-			err = s.redisClient.Set(code, url, 720*time.Hour).Err()
+			expireInt, err := strconv.Atoi(expire)
+			if err != nil {
+				return "", err
+			}
+
+			err = s.redisClient.Set(code, url, time.Duration(expireInt)*24*time.Hour).Err()
 			if err != nil {
 				return "", err
 			}

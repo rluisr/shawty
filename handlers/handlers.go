@@ -11,7 +11,12 @@ import (
 func EncodeHandler(storage storages.IStorage) http.Handler {
 	handleFunc := func(w http.ResponseWriter, r *http.Request) {
 		if url := r.URL.Query().Get("url"); url != "" {
-			code, err := storage.Save(url)
+			expire := r.URL.Query().Get("expire")
+			if expire == "" {
+				expire = "30"
+			}
+
+			code, err := storage.Save(url, expire)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				_, _ = w.Write([]byte("err: " + err.Error()))
